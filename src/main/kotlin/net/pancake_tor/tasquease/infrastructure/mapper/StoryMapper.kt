@@ -1,5 +1,6 @@
 package net.pancake_tor.tasquease.infrastructure.mapper
 
+import net.pancake_tor.tasquease.infrastructure.command.StoryCommand
 import net.pancake_tor.tasquease.infrastructure.resource.StoryResource
 import org.apache.ibatis.annotations.*
 import org.apache.ibatis.builder.annotation.ProviderMethodResolver
@@ -15,10 +16,11 @@ interface StoryMapper {
     fun findAll(): List<StoryResource>
 
     @InsertProvider(StorySqlProvider::class)
-    fun insert(story: StoryResource)
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    fun insert(story: StoryCommand)
 
     @UpdateProvider(StorySqlProvider::class)
-    fun update(story: StoryResource)
+    fun update(story: StoryCommand)
 
     @DeleteProvider(StorySqlProvider::class)
     fun delete(id: Int)
@@ -42,25 +44,27 @@ interface StoryMapper {
                 .toString()
         }
 
-        fun insert(story: StoryResource): String {
+        fun insert(storyCommand: StoryCommand): String {
             return SQL()
                 .INSERT_INTO(STORY)
                 .VALUES("title", "#{title}")
                 .VALUES("description", "#{description}")
                 .VALUES("tags", "#{tags}")
-                .VALUES("created_at", "#{createdAt}")
-                .VALUES("created_by", "#{createdBy}")
-                .VALUES("updated_by", "#{updatedBy}")
+                .VALUES("created_at", "NOW()")
+                .VALUES("created_by", "#{modifiedBy}")
+                .VALUES("updated_at", "NOW()")
+                .VALUES("updated_by", "#{modifiedBy}")
                 .toString()
         }
 
-        fun update(story: StoryResource): String {
+        fun update(story: StoryCommand): String {
             return SQL()
                 .UPDATE(STORY)
                 .SET("title = #{title}")
                 .SET("description = #{description}")
                 .SET("tags = #{tags}")
-                .SET("updated_by = #{updatedBy}")
+                .SET("updated_at = NOW()")
+                .SET("updated_by = #{modifiedBy}")
                 .WHERE("id = #{id}")
                 .toString()
         }

@@ -1,5 +1,6 @@
 package net.pancake_tor.tasquease.presentation
 
+import net.pancake_tor.tasquease.application.request.StorySaveRequest
 import net.pancake_tor.tasquease.application.usecase.StoryUsecase
 import net.pancake_tor.tasquease.domain.model.Story
 import net.pancake_tor.tasquease.domain.model.Task
@@ -22,8 +23,8 @@ class StoryController @Autowired constructor(
     }
 
     @PostMapping("")
-    fun saveStory(story: Story): Story {
-        return storyUsecase.saveStory(story)
+    fun saveStory(@RequestBody storySaveRequest: StorySaveRequest): Story {
+        return storyUsecase.saveStory(storySaveRequest)
     }
 
     @DeleteMapping("/{storyId}")

@@ -1,6 +1,7 @@
 package net.pancake_tor.tasquease.domain.service
 
 import net.pancake_tor.tasquease.domain.model.Story
+import net.pancake_tor.tasquease.domain.model.StoryWithMetadata
 import net.pancake_tor.tasquease.domain.repository.StoryRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -17,8 +18,8 @@ class StoryService @Autowired constructor(
         return storyRepository.getStories()
     }
 
-    fun saveStory(story: Story): Story {
-        return storyRepository.saveStory(story)
+    fun saveStory(story: Story, modifiedBy: Int): StoryWithMetadata {
+        return storyRepository.saveStory(story, modifiedBy)
     }
 
     fun deleteStory(storyId: Int) {

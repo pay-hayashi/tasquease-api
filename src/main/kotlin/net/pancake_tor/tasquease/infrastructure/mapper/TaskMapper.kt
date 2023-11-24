@@ -1,5 +1,6 @@
 package net.pancake_tor.tasquease.infrastructure.mapper
 
+import net.pancake_tor.tasquease.infrastructure.command.TaskCommand
 import net.pancake_tor.tasquease.infrastructure.resource.TaskResource
 import org.apache.ibatis.annotations.*
 import org.apache.ibatis.builder.annotation.ProviderMethodResolver
@@ -15,10 +16,11 @@ interface TaskMapper {
     fun findByStoryId(storyId: Int): List<TaskResource>
 
     @InsertProvider(TaskSqlProvider::class)
-    fun insert(task: TaskResource)
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    fun insert(task: TaskCommand)
 
     @UpdateProvider(TaskSqlProvider::class)
-    fun update(task: TaskResource)
+    fun update(task: TaskCommand)
 
     @DeleteProvider(TaskSqlProvider::class)
     fun delete(id: Int)
@@ -43,28 +45,29 @@ interface TaskMapper {
                 .toString()
         }
 
-        fun insert(task: TaskResource): String {
+        fun insert(task: TaskCommand): String {
             return SQL()
                 .INSERT_INTO(TASK)
                 .VALUES("story_id", "#{storyId}")
                 .VALUES("title", "#{title}")
                 .VALUES("description", "#{description}")
                 .VALUES("tags", "#{tags}")
-                .VALUES("created_at", "#{createdAt}")
-                .VALUES("created_by", "#{createdBy}")
-                .VALUES("updated_by", "#{updatedBy}")
+                .VALUES("created_at", "NOW()")
+                .VALUES("created_by", "#{modifiedBy}")
+                .VALUES("updated_at", "NOW()")
+                .VALUES("updated_by", "#{modifiedBy}")
                 .toString()
         }
 
-        fun update(task: TaskResource): String {
+        fun update(task: TaskCommand): String {
             return SQL()
                 .UPDATE(TASK)
                 .SET("story_id = #{storyId}")
                 .SET("title = #{title}")
                 .SET("description = #{description}")
                 .SET("tags = #{tags}")
-                .SET("updated_at = #{updatedAt}")
-                .SET("updated_by = #{updatedBy}")
+                .SET("updated_at = NOW()")
+                .SET("updated_by = #{modifiedBy}")
                 .WHERE("id = #{id}")
                 .toString()
         }

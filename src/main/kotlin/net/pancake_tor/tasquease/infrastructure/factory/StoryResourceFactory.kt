@@ -1,13 +1,15 @@
 package net.pancake_tor.tasquease.infrastructure.factory
 
 import net.pancake_tor.tasquease.domain.model.Story
+import net.pancake_tor.tasquease.domain.model.StoryWithMetadata
+import net.pancake_tor.tasquease.infrastructure.command.StoryCommand
 import net.pancake_tor.tasquease.infrastructure.resource.StoryResource
 import org.springframework.stereotype.Component
 
 @Component
-class StoryFactory {
-    fun createStory(storyResource: StoryResource): Story {
-        return Story(
+class StoryResourceFactory {
+    fun createStory(storyResource: StoryResource): StoryWithMetadata {
+        return StoryWithMetadata(
             id = storyResource.id,
             title = storyResource.title,
             description = storyResource.description,
@@ -19,24 +21,17 @@ class StoryFactory {
         )
     }
 
-    fun createStory(storyResources: List<StoryResource>): List<Story> {
+    fun createStory(storyResources: List<StoryResource>): List<StoryWithMetadata> {
         return storyResources.map(this::createStory)
     }
 
-    fun createStoryResource(story: Story): StoryResource {
-        return StoryResource(
+    fun createStoryCommand(story: Story, modifiedBy: Int): StoryCommand {
+        return StoryCommand(
             id = story.id,
             title = story.title,
             description = story.description,
             tags = story.tags.joinToString(","),
-            createdAt = story.createdAt,
-            createdBy = story.createdBy,
-            updatedAt = story.updatedAt,
-            updatedBy = story.updatedBy,
+            modifiedBy,
         )
-    }
-
-    fun createStoryResource(stories: List<Story>): List<StoryResource> {
-        return stories.map(this::createStoryResource)
     }
 }

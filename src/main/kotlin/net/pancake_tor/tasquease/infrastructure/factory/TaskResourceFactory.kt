@@ -1,18 +1,20 @@
 package net.pancake_tor.tasquease.infrastructure.factory
 
 import net.pancake_tor.tasquease.domain.model.Task
+import net.pancake_tor.tasquease.domain.model.TaskWithMetadata
+import net.pancake_tor.tasquease.infrastructure.command.TaskCommand
 import net.pancake_tor.tasquease.infrastructure.resource.TaskResource
 import org.springframework.stereotype.Component
 
 @Component
-class TaskFactory {
-    fun createTask(taskResource: TaskResource): Task {
-        return Task(
+class TaskResourceFactory {
+    fun createTask(taskResource: TaskResource): TaskWithMetadata {
+        return TaskWithMetadata(
             id = taskResource.id,
             storyId = taskResource.storyId,
             title = taskResource.title,
             description = taskResource.description,
-            tags = taskResource.tags.split(","),
+            tags = taskResource.tags.split(",").toHashSet(),
             createdAt = taskResource.createdAt,
             createdBy = taskResource.createdBy,
             updatedAt = taskResource.updatedAt,
@@ -20,21 +22,18 @@ class TaskFactory {
         )
     }
 
-    fun createTask(taskResources: List<TaskResource>): List<Task> {
+    fun createTask(taskResources: List<TaskResource>): List<TaskWithMetadata> {
         return taskResources.map(this::createTask)
     }
 
-    fun createTaskResource(task: Task): TaskResource {
-        return TaskResource(
+    fun createTaskCommand(task: Task, modifiedBy: Int): TaskCommand {
+        return TaskCommand(
             id = task.id,
             storyId = task.storyId,
             title = task.title,
             description = task.description,
             tags = task.tags.joinToString(","),
-            createdAt = task.createdAt,
-            createdBy = task.createdBy,
-            updatedAt = task.updatedAt,
-            updatedBy = task.updatedBy
+            modifiedBy,
         )
     }
 }

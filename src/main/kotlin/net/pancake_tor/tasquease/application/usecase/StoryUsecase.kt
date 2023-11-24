@@ -1,6 +1,9 @@
 package net.pancake_tor.tasquease.application.usecase
 
+import net.pancake_tor.tasquease.application.factory.StoryRequestFactory
+import net.pancake_tor.tasquease.application.request.StorySaveRequest
 import net.pancake_tor.tasquease.domain.model.Story
+import net.pancake_tor.tasquease.domain.model.StoryWithMetadata
 import net.pancake_tor.tasquease.domain.model.Task
 import net.pancake_tor.tasquease.domain.service.StoryService
 import net.pancake_tor.tasquease.domain.service.TaskService
@@ -11,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 @Service
 class StoryUsecase @Autowired constructor(
+    private val storyRequestFactory: StoryRequestFactory,
     private val storyService: StoryService,
     private val taskService: TaskService,
 ) {
@@ -22,8 +26,9 @@ class StoryUsecase @Autowired constructor(
         return storyService.getStory(storyId)
     }
 
-    fun saveStory(story: Story): Story {
-        return storyService.saveStory(story)
+    fun saveStory(storySaveRequest: StorySaveRequest): StoryWithMetadata {
+        val story = storyRequestFactory.createStory(storySaveRequest)
+        return storyService.saveStory(story, storySaveRequest.modifiedBy)
     }
 
     fun deleteStory(storyId: Int) {
