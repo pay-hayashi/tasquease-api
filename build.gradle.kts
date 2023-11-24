@@ -25,15 +25,16 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.springframework.boot:spring-boot-starter-web:3.1.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-//	implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2")
-    compileOnly("org.projectlombok:lombok")
-    annotationProcessor("org.projectlombok:lombok")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2")
+    compileOnly("org.projectlombok:lombok:1.18.26")
+    annotationProcessor("org.projectlombok:lombok:1.18.26")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.1.0")
     testImplementation("org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.2")
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
+    developmentOnly("org.springframework.boot:spring-boot-devtools:3.0.4")
+    runtimeOnly("mysql:mysql-connector-java:8.0.33")
 }
 
 tasks.withType<KotlinCompile> {

@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/tasquease
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
