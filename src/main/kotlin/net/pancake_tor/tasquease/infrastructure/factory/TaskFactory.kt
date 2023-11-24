@@ -19,4 +19,22 @@ class TaskFactory {
             updatedBy = taskResource.updatedBy
         )
     }
+
+    fun createTask(taskResources: List<TaskResource>): List<Task> {
+        return taskResources.map(this::createTask)
+    }
+
+    fun createTaskResource(task: Task): TaskResource {
+        return TaskResource(
+            id = task.id,
+            storyId = task.storyId,
+            title = task.title,
+            description = task.description,
+            tags = task.tags.joinToString(","),
+            createdAt = task.createdAt,
+            createdBy = task.createdBy,
+            updatedAt = task.updatedAt,
+            updatedBy = task.updatedBy
+        )
+    }
 }

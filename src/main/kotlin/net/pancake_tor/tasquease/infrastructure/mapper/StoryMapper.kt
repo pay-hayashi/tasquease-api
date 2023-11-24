@@ -48,6 +48,7 @@ interface StoryMapper {
                 .VALUES("title", "#{title}")
                 .VALUES("description", "#{description}")
                 .VALUES("tags", "#{tags}")
+                .VALUES("created_at", "#{createdAt}")
                 .VALUES("created_by", "#{createdBy}")
                 .VALUES("updated_by", "#{updatedBy}")
                 .toString()
